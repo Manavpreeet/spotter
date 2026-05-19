@@ -7,7 +7,10 @@ Plan truck trips under US Hours of Service rules. Get route maps, step-by-step i
 | Service | URL |
 |---------|-----|
 | Frontend | https://spotter-hos.vercel.app |
-| API | https://spotter-api.onrender.com/api/health/ |
+| API | https://spotter-api.onrender.com/api/ |
+| GitHub | https://github.com/Manavpreeet/spotter |
+
+**Deploy API on Render (one-time):** [Deploy to Render](https://render.com/deploy?repo=https://github.com/Manavpreeet/spotter) — connect GitHub, approve `render.yaml`, wait ~5 min for first boot.
 
 ## Stack
 
