@@ -5,13 +5,22 @@ from __future__ import annotations
 from functools import lru_cache
 from zoneinfo import ZoneInfo
 
+_tf_instance = None
+
+
+def _get_timezone_finder():
+    global _tf_instance
+    if _tf_instance is None:
+        from timezonefinder import TimezoneFinder
+
+        _tf_instance = TimezoneFinder()
+    return _tf_instance
+
 
 @lru_cache(maxsize=512)
 def timezone_at(lat: float, lon: float) -> ZoneInfo:
     try:
-        from timezonefinder import TimezoneFinder
-
-        tf = TimezoneFinder()
+        tf = _get_timezone_finder()
         name = tf.timezone_at(lat=lat, lng=lon)
         if name:
             return ZoneInfo(name)

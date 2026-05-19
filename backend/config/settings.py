@@ -136,11 +136,14 @@ _cors_origins = os.environ.get(
 CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins if o.strip()]
 CORS_ALLOW_CREDENTIALS = True
 
-# Allow Vercel preview/production URLs without listing every deployment URL.
-if not DEBUG:
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-        r"^https://[\w.-]+\.vercel\.app$",
-    ]
+# Vercel production + preview URLs (works even if DJANGO_DEBUG is mis-set on Render).
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://[\w.-]+\.vercel\.app$",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    o for o in CORS_ALLOWED_ORIGINS if o.startswith("https://")
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],

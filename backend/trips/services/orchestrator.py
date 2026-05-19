@@ -4,6 +4,7 @@ Plan a full trip: geocode -> route -> HOS schedule -> daily logs.
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 
 from trips.hos import RouteLeg, build_daily_logs, schedule_trip
@@ -47,9 +48,13 @@ def plan_trip(
 ) -> dict:
     opts = _trip_options_from_dict(options)
 
-    current = geocode_address(current_location)
-    pickup = geocode_address(pickup_location)
-    dropoff = geocode_address(dropoff_location)
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        f_current = pool.submit(geocode_address, current_location)
+        f_pickup = pool.submit(geocode_address, pickup_location)
+        f_dropoff = pool.submit(geocode_address, dropoff_location)
+        current = f_current.result()
+        pickup = f_pickup.result()
+        dropoff = f_dropoff.result()
 
     waypoints = [
         (current["lon"], current["lat"]),
